@@ -1,0 +1,17 @@
+target/
+/.lib/
+
+*~
+/.ensime
+
+*.cache
+*.classpath
+*.project
+*.settings/
+*.scalastyle
+tags
+
+boot/
+lib_managed/
+src_managed/
+project/plugins/project/
