@@ -6,7 +6,9 @@ import spray.routing.HttpService
 import spray.httpx.Json4sSupport
 
 @Api(value = "/user", description = "Operations about users.", produces="application/json")
-trait UserHttpService extends HttpService with Json4sSupport {
+trait UserHttpService extends HttpService {
+
+  val routes = readRoute ~ getUser
 
   @ApiOperation(value = "Updated user", notes = "This can only be done by the logged in user.", nickname = "updateUser", httpMethod = "PUT")
   @ApiImplicitParams(Array(
@@ -17,8 +19,8 @@ trait UserHttpService extends HttpService with Json4sSupport {
     new ApiResponse(code = 404, message = "User not found"),
     new ApiResponse(code = 400, message = "Invalid username supplied")
   ))
-  def readRoute = put { path("/user" / Segment) { id =>
-    complete(id)
+  def readRoute = put { path("user" / Segment) { id =>
+    complete(s"Put ${id}")
   }}
 
   @ApiOperation(value = "Get user by name", notes = "", response=classOf[User], nickname = "getUserByName", httpMethod = "GET")
@@ -30,8 +32,8 @@ trait UserHttpService extends HttpService with Json4sSupport {
   @ApiResponses(Array(
     new ApiResponse(code = 404, message = "User does not exist.")
   ))
-  def getUser = post { path("/user" / Segment) { id => { formFields('name, 'status) { (name, status) =>
-    complete("ok")
+  def getUser = post { path("user" / Segment) { id => { formFields('name, 'status) { (name, status) =>
+    complete(s"Posted $name, $status")
   }}}}
 
 }

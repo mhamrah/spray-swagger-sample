@@ -12,7 +12,7 @@ object SampleApp extends App {
   implicit val system = ActorSystem("spray-swagger-sample-system")
 
   /* Spray Service */
-  val service= system.actorOf(Props[SprayswaggersampleActor], "spray-swagger-sample-service")
+  val service= system.actorOf(Props[SampleServiceActor], "spray-swagger-sample-service")
 
   val ioListener = actor("ioListener")(new Act with ActorLogging {
     become {
@@ -21,6 +21,6 @@ object SampleApp extends App {
   })
 
 
-  IO(Http).tell(Http.Bind(service, SprayswaggersampleConfig.HttpConfig.interface, SampleConfig.HttpConfig.port), ioListener)
+  IO(Http).tell(Http.Bind(service, SampleConfig.HttpConfig.interface, SampleConfig.HttpConfig.port), ioListener)
 
 }
