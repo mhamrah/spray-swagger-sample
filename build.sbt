@@ -81,7 +81,7 @@ libraryDependencies ++= Seq (
   ,"io.spray" %% "spray-routing" % spray
   ,"io.spray" %% "spray-client" % spray
   ,"io.spray" %% "spray-testkit" % spray % "test"
-  ,"com.gettyimages" %% "spray-swagger" % "0.4.3-SNAPSHOT" excludeAll( ExclusionRule(organization = "org.json4s") )
+  ,"com.gettyimages" %% "spray-swagger" % "0.4.3" excludeAll( ExclusionRule(organization = "org.json4s") )
   // -- json --
   ,"org.json4s" %% "json4s-jackson" % "3.2.10"
   // -- config --
@@ -91,7 +91,7 @@ libraryDependencies ++= Seq (
 /* you may need these repos */
 resolvers ++= Seq(
    Resolver.sonatypeRepo("snapshots")
-  // Resolver.typesafeRepo("releases")
+   ,Resolver.typesafeRepo("releases")
   ,"spray repo" at "http://repo.spray.io"
 )
 
