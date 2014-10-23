@@ -1,12 +1,12 @@
 name := "spray-swagger-sample"
 
-organization := "com.mlh"
+organization := "com.hamrah"
 
 version := "0.1.0-SNAPSHOT"
 
 homepage := Some(url("https://github.com/mhamrah/spray-swagger-sample"))
 
-startYear := Some(2013)
+startYear := Some(2014)
 
 scmInfo := Some(
   ScmInfo(
@@ -17,15 +17,7 @@ scmInfo := Some(
 )
 
 /* scala versions and options */
-scalaVersion := "2.11.1"
-
-crossScalaVersions := Seq(
-/*  "2.9.3-RC1",
-  "2.9.2",
-  "2.9.1", "2.9.1-1",
-  "2.9.0", "2.9.0-1",
-  "2.8.0", "2.8.1", "2.8.2" */
-)
+scalaVersion := "2.11.2"
 
 // These options will be used for *all* versions.
 scalacOptions ++= Seq(
@@ -60,8 +52,8 @@ scalacOptions <++= scalaVersion map { sv =>
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
-val akka = "2.3.3"
-val spray = "1.3.1-20140423"
+val akka = "2.3.6"
+val spray = "1.3.2"
 
 /* dependencies */
 libraryDependencies ++= Seq (
@@ -81,7 +73,7 @@ libraryDependencies ++= Seq (
   ,"io.spray" %% "spray-routing" % spray
   ,"io.spray" %% "spray-client" % spray
   ,"io.spray" %% "spray-testkit" % spray % "test"
-  ,"com.gettyimages" %% "spray-swagger" % "0.4.3" excludeAll( ExclusionRule(organization = "org.json4s") )
+  ,"com.gettyimages" %% "spray-swagger" % "0.5.0"// excludeAll( ExclusionRule(organization = "org.json4s") )
   // -- json --
   ,"org.json4s" %% "json4s-jackson" % "3.2.10"
   // -- config --
@@ -91,14 +83,15 @@ libraryDependencies ++= Seq (
 /* you may need these repos */
 resolvers ++= Seq(
    Resolver.sonatypeRepo("snapshots")
+   ,Resolver.sonatypeRepo("releases")
    ,Resolver.typesafeRepo("releases")
   ,"spray repo" at "http://repo.spray.io"
 )
-
-//atmosSettings
 
 packageArchetype.java_server
 
 seq(Revolver.settings: _*)
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
+
+

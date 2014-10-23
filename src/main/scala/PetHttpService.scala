@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations._
 import javax.ws.rs.Path
 import spray.routing.HttpService
 
-@Api(value = "/pet", description = "Operations about pets.")
+@Api(value = "/pet", description = "Operations about pets.", position = 0)
 trait PetHttpService extends HttpService {
 
   import Json4sSupport._
@@ -56,7 +56,14 @@ trait PetHttpService extends HttpService {
   def addRoute = post { path("/pet" / Segment) { id => complete(id) } }
 
   @ApiOperation(value = "Searches for a pet", nickname="searchPet", httpMethod="GET", produces="application/json, application/xml")
-  def searchRoute = get { path("pet") { { complete(new Pet(1, "sparky", new java.util.Date())) } } }
+  def searchRoute = get { path("pet")  { complete(new Pet(1, "sparky", new java.util.Date())) } }
+
+  @Path("/findByTags")
+  @ApiOperation(value="Find Pets by Tags", httpMethod="GET", nickname="findPetsByTags")
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(name = "petId", value = "Tags to filter by", required = true, dataType="string", paramType="query", allowMultiple=true)
+  ))
+  def findByTags = get { path("findByTags") { complete(List(new Pet(1, "sparky", new java.util.Date()))) } }
 }
 
 case class Pet(id: Int, name: String, birthDate: java.util.Date)

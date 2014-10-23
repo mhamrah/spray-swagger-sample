@@ -20,7 +20,6 @@ object SampleApp extends App {
     }
   })
 
-
   IO(Http).tell(Http.Bind(service, SampleConfig.HttpConfig.interface, SampleConfig.HttpConfig.port), ioListener)
 
 }
