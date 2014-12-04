@@ -9,7 +9,7 @@ trait PetHttpService extends HttpService {
 
   import Json4sSupport._
 
-  val routes = readRoute ~ updateRoute ~ deleteRoute ~ addRoute ~ searchRoute
+  val routes = readRoute ~ updateRoute ~ deleteRoute ~ addRoute ~ searchRoute ~ readRouteForNestedResource
 
 
   @ApiOperation(value = "Find a pet by ID", notes = "Returns a pet based on ID", httpMethod = "GET", response = classOf[Pet])
@@ -20,9 +20,11 @@ trait PetHttpService extends HttpService {
     new ApiResponse(code = 404, message = "Pet not found"),
     new ApiResponse(code = 400, message = "Invalid ID supplied")
   ))
-  def readRoute = get { path("pet" / IntNumber) { id =>
-    complete(Pet(id, "Sparky", new java.util.Date()))
-  }}
+  def readRoute = get {
+    path("pet" / IntNumber) { id =>
+      complete(Pet(id, "Sparky", new java.util.Date()))
+    }
+  }
 
   @ApiOperation(value = "Updates a pet in the store with form data.", notes = "", nickname = "updatePetWithForm", httpMethod = "POST")
   @ApiImplicitParams(Array(
@@ -33,37 +35,68 @@ trait PetHttpService extends HttpService {
   @ApiResponses(Array(
     new ApiResponse(code = 404, message = "Dictionary does not exist.")
   ))
-  def updateRoute = post { path("pet" / Segment) { id => { formFields('name, 'status) { (name, status) =>
-    complete("ok")
-  }}}}
+  def updateRoute = post {
+    path("pet" / Segment) { id => {
+      formFields('name, 'status) { (name, status) =>
+        complete("ok")
+      }
+    }
+    }
+  }
 
-  @ApiOperation(value = "Deletes a pet", nickname="deletePet", httpMethod = "DELETE")
+  @ApiOperation(value = "Deletes a pet", nickname = "deletePet", httpMethod = "DELETE")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "petId", value = "Pet id to delete", required = true, dataType="string", paramType="path")
+    new ApiImplicitParam(name = "petId", value = "Pet id to delete", required = true, dataType = "string", paramType = "path")
   ))
   @ApiResponses(Array(
     new ApiResponse(code = 400, message = "Invalid pet value")
   ))
-  def deleteRoute = delete { path("pet" / Segment) { id => complete(s"Deleted $id") } }
+  def deleteRoute = delete {
+    path("pet" / Segment) { id => complete(s"Deleted $id")}
+  }
 
-  @ApiOperation(value = "Add a new pet to the store", nickname="addPet", httpMethod="POST", consumes="application/json, application/vnd.custom.pet")
+  @ApiOperation(value = "Add a new pet to the store", nickname = "addPet", httpMethod = "POST", consumes = "application/json, application/vnd.custom.pet")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "body", value = "Pet object that needs to be added to the store", dataType="Pet", required = true, paramType="body")
+    new ApiImplicitParam(name = "body", value = "Pet object that needs to be added to the store", dataType = "Pet", required = true, paramType = "body")
   ))
   @ApiResponses(Array(
     new ApiResponse(code = 405, message = "Invalid input")
   ))
-  def addRoute = post { path("/pet" / Segment) { id => complete(id) } }
+  def addRoute = post {
+    path("/pet" / Segment) { id => complete(id)}
+  }
 
-  @ApiOperation(value = "Searches for a pet", nickname="searchPet", httpMethod="GET", produces="application/json, application/xml")
-  def searchRoute = get { path("pet")  { complete(new Pet(1, "sparky", new java.util.Date())) } }
+  @ApiOperation(value = "Searches for a pet", nickname = "searchPet", httpMethod = "GET", produces = "application/json, application/xml")
+  def searchRoute = get {
+    path("pet") {
+      complete(new Pet(1, "sparky", new java.util.Date()))
+    }
+  }
 
   @Path("/findByTags")
-  @ApiOperation(value="Find Pets by Tags", httpMethod="GET", nickname="findPetsByTags")
+  @ApiOperation(value = "Find Pets by Tags", httpMethod = "GET", nickname = "findPetsByTags")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "petId", value = "Tags to filter by", required = true, dataType="string", paramType="query", allowMultiple=true)
+    new ApiImplicitParam(name = "petId", value = "Tags to filter by", required = true, dataType = "string", paramType = "query", allowMultiple = true)
   ))
-  def findByTags = get { path("findByTags") { complete(List(new Pet(1, "sparky", new java.util.Date()))) } }
+  def findByTags = get {
+    path("findByTags") {
+      complete(List(new Pet(1, "sparky", new java.util.Date())))
+    }
+  }
+
+  @Path("/{petId}/friends/{friendId}")
+  @ApiOperation(value = "Find Pet's friend by friendId", httpMethod = "GET", nickname = "findPetsFriendById")
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(name = "petId", value = "Pet id of the pet whose friend needs to be fetched", required = true, dataType = "string", paramType = "path"),
+    new ApiImplicitParam(name = "friendId", value = "Id of the friend that needs to be fetched", required = true, dataType = "string", paramType = "path")
+  ))
+  def readRouteForNestedResource = get {
+    path("pet" / Segment / "friends" / Segment) {
+      (petId, friendId) => {
+        complete(new Pet(2, "scooby (sparky's friend)", new java.util.Date()))
+      }
+    }
+  }
 }
 
 case class Pet(id: Int, name: String, birthDate: java.util.Date)
