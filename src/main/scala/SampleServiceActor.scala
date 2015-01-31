@@ -20,7 +20,11 @@ class SampleServiceActor
       def actorRefFactory = context
     }
 
-    def receive = runRoute(pets.routes ~ users.routes ~ swaggerService.routes ~
+    val persons = new PersonHttpService {
+      def actorRefFactory = context
+    }
+
+    def receive = runRoute(pets.routes ~ users.routes ~ persons.routes ~ swaggerService.routes ~
       get {
         pathPrefix("") { pathEndOrSingleSlash {
             getFromResource("swagger-ui/index.html")
@@ -30,7 +34,7 @@ class SampleServiceActor
       })
 
   val swaggerService = new SwaggerHttpService {
-    override def apiTypes = Seq(typeOf[PetHttpService], typeOf[UserHttpService])
+    override def apiTypes = Seq(typeOf[PetHttpService], typeOf[UserHttpService], typeOf[PersonHttpService])
     override def apiVersion = "2.0"
     override def baseUrl = "/" // let swagger-ui determine the host and port
     override def docsPath = "api-docs"
