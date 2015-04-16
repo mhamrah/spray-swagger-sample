@@ -62,7 +62,6 @@ libraryDependencies ++= Seq (
   , "org.scalatest" % "scalatest_2.11" % "2.2.0" % "test"
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.1.2"
-  ,"com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
   // -- Akka --
   ,"com.typesafe.akka" %% "akka-testkit" % akka % "test"
   ,"com.typesafe.akka" %% "akka-actor" % akka
@@ -73,7 +72,7 @@ libraryDependencies ++= Seq (
   ,"io.spray" %% "spray-routing" % spray
   ,"io.spray" %% "spray-client" % spray
   ,"io.spray" %% "spray-testkit" % spray % "test"
-  ,"com.gettyimages" %% "spray-swagger" % "0.5.0"// excludeAll( ExclusionRule(organization = "org.json4s") )
+  ,"com.gettyimages" %% "spray-swagger" % "0.5.1"
   // -- json --
   ,"org.json4s" %% "json4s-jackson" % "3.2.10"
   // -- config --
